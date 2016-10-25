@@ -1,10 +1,9 @@
-﻿Import-Module Pester -Force
-
+﻿$module = 'roarwrecker.testing'
 $sut = 'Import-ModuleFromPath'
 
-$module = (Get-Item $PSScriptRoot).Parent
-$path = $module.FullName
+Import-Module Pester -Force
 
+$path = "$(Split-Path -Path $PSScriptRoot -Parent)\$module"
 if (-not (Test-Path $path))
 {
     throw "Path to module does not exist: '$path'."
@@ -105,17 +104,19 @@ Describe "'$sut' tests with invalid path" {
 #>
 Describe "'$sut' with no path parameter" {
 
+    $moduleName = 'module'
     # Create the module folder
-    $moduleFolder = New-Item -Path "$TestDrive\module" -ItemType Directory
-    # Create tests folder where the script which will be invoked will be created to
-    $testsFolder = New-Item -Path "$($moduleFolder)\tests" -ItemType Directory
+    $moduleFolder = New-Item -Path "$TestDrive\$moduleName" -ItemType Directory
+    # Create tests folder where the test script will be written to.
+    $testsFolder = New-Item -Path "$TestDrive\tests" -ItemType Directory
     # Create the corresponding module.psm1 file
-    $psModuleFile = New-Item -Path "$moduleFolder\module.psm1" -ItemType File
+    $psModuleFile = New-Item -Path "$moduleFolder\$moduleName.psm1" -ItemType File
 
     # Create the file and write the file content into it
     $scriptPath = "$($testsFolder)\Invoke-SutWithoutPath.ps1"
     New-Item -Path $scriptPath -ItemType File
-    Set-Content -Path $scriptPath -Value "& $($sut) -Parent"
+    # Content of test script: Contains the actual invocation of the SUT.
+    Set-Content -Path $scriptPath -Value "& $($sut) -Parent -Name $moduleName"
     
     Mock Remove-Module { } -ModuleName $module
     Mock Import-Module { } -ModuleName $module

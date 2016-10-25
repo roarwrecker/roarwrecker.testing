@@ -1,8 +1,9 @@
-﻿Import-Module pester -Force
-Import-Module roarwrecker.testing -Force
-Import-ModuleFromPath -Parent
-
+﻿$module = 'roarwrecker.testing'
 $sut = 'Test-ModulePath'
+
+Import-Module pester -Force
+# todo: once roarwrecker.testing is published on online repository, resolve the module from there and import it
+Import-Module -Name "$PSScriptRoot\..\$module" -Force
 
 Describe "'$sut' without module file" {
 

@@ -23,36 +23,41 @@
     Reloads the module from the absolute path
 
 .EXAMPLE
-    Import-ModuleFromPath -Parent
+    Import-ModuleFromPath -Parent -Name Module
 
-    Reloads the module by analyzing the PSCallStack. The module folder must be the parent
-    folder where the invocation took place.
+    Reloads the module by analyzing the PSCallStack. The module folder must be located 
+    int parent folder where the invocation of Import-ModuleFromPath took place.
 #>
 function Import-ModuleFromPath
 {
     [CmdletBinding()]
     Param
     (
-        # The path to the module folder which should get loaded.
+        # The path to the module folder.
         [Parameter(ParameterSetName='ByPath',
             Mandatory)]
         [ValidateScript({Test-Path $_ -PathType ‘Container’})]
         [string]
         $Path,
 
+        # Indicates that the module should be loaded from the parent folder of the current 
+        # invocation scope. 
         [Parameter(ParameterSetName='ByParentSwitch',
             Mandatory)]
         [switch]
-        $Parent
-    )
-    
-    switch($PsCmdlet.ParameterSetName)
-    {
-        'ByParentSwitch' { 
+        $Parent,
 
-            $Path = GetPathFromCallStack
-            Write-Verbose "Identified module path from call stack: $($Path)"
-        }
+        # The name of the module located in the parent folder.
+        [Parameter(ParameterSetName='ByParentSwitch',
+            Mandatory)]
+        [string]
+        $Name
+    )
+    if ($PsCmdlet.ParameterSetName -eq 'ByParentSwitch')
+    {
+        # todo: error handling
+        $Path = "$(GetPathFromCallStack)\$Name"
+        Write-Verbose "Identified module path from call stack: $($Path)"
     }
     $Folder = Get-Item -Path $Path
 
@@ -77,6 +82,5 @@ function Import-ModuleFromPath
 function GetPathFromCallStack
 {
     $scriptRoot = (Get-PSCallStack)[2].GetFrameVariables().PSScriptRoot.Value
-    
-    return Split-Path -Parent -Path $scriptRoot
+    Split-Path -Parent -Path $scriptRoot
 }
