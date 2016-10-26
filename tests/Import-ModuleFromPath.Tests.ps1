@@ -1,7 +1,7 @@
-﻿$module = 'roarwrecker.testing'
-$sut = 'Import-ModuleFromPath'
+﻿#require module pester
 
-Import-Module Pester -Force
+$module = 'roarwrecker.testing'
+$sut = 'Import-ModuleFromPath'
 
 $path = "$(Split-Path -Path $PSScriptRoot -Parent)\$module"
 if (-not (Test-Path $path))
