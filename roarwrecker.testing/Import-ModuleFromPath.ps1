@@ -1,4 +1,6 @@
-﻿<#
+﻿#Requires -Version 3.0
+
+<#
 .Synopsis
     Re-Imports a module from the given path.
 

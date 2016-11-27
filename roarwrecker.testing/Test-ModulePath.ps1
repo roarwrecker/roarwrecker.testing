@@ -1,4 +1,6 @@
-﻿<#
+﻿#Requires -Version 3.0
+
+<#
 .Synopsis
    Tests if the specified path points to a module.
 #>

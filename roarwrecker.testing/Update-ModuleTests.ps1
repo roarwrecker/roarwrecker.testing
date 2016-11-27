@@ -1,4 +1,5 @@
-﻿<#
+﻿#Requires -Version 3.0
+<#
 .Synopsis
    Creates a new test base for a PS module.
 .DESCRIPTION
