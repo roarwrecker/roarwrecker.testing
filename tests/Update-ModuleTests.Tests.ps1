@@ -3,10 +3,13 @@
 $module = 'roarwrecker.testing'
 $sut = 'Update-ModuleTests'
 
-# todo: once roarwrecker.testing is published on online repository, resolve the module from there and import it
-Import-Module -Name "$PSScriptRoot\..\$module" -Force
+$path = "$(Split-Path -Path $PSScriptRoot -Parent)\$module"
+Get-Module $module | Remove-Module -Force
+Import-Module $path -Force -ErrorAction Stop
 
-Describe "'$sut' with invalid path" {    
+
+Describe "'$sut' with invalid path" {
+    
     $modulePath = New-Item -Path "$TestDrive\module" -ItemType Directory
 
     It "should throw an error when psm file does not exist" {
@@ -35,11 +38,13 @@ Describe "'$sut' without any existing tests" {
     }
 
     It "should create a test file for the first script" -Skip {
-        Test-Path -Path "$modulePath\tests\$firstScriptName.Tests.ps1" -PathType Leaf `            | should be $true
+        Test-Path -Path "$modulePath\tests\$firstScriptName.Tests.ps1" -PathType Leaf `
+            | should be $true
     }
 
     It "should create a test file for the second script" -Skip {
-        Test-Path -Path "$modulePath\tests\$secondScriptName.Tests.ps1" -PathType Leaf `            | should be $true
+        Test-Path -Path "$modulePath\tests\$secondScriptName.Tests.ps1" -PathType Leaf `
+            | should be $true
     }
 
 }

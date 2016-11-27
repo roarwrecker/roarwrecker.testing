@@ -3,8 +3,10 @@
 $module = 'roarwrecker.testing'
 $sut = 'Test-ModulePath'
 
-# todo: once roarwrecker.testing is published on online repository, resolve the module from there and import it
-Import-Module -Name "$PSScriptRoot\..\$module" -Force
+$path = "$(Split-Path -Path $PSScriptRoot -Parent)\$module"
+Get-Module $module | Remove-Module -Force
+Import-Module $path -Force -ErrorAction Stop
+
 
 Describe "'$sut' without module file" {
 
@@ -17,7 +19,12 @@ Describe "'$sut' without module file" {
     }
 
     It "should return false for multiple folders via pipeline input" {
-        $result = ($folder1, $folder2, $folder3) | & $sut        $result | Where-Object { $_ -eq $false } `            | Measure-Object `            | Select-Object -ExpandProperty Count `            | should be 3
+        $result = ($folder1, $folder2, $folder3) | & $sut
+
+        $result | Where-Object { $_ -eq $false } `
+            | Measure-Object `
+            | Select-Object -ExpandProperty Count `
+            | should be 3
     }
 }
 
@@ -36,6 +43,11 @@ Describe "'$sut' with module file" {
     }
 
     It "should return true for multiple folders via pipeline input" {
-        $result = ($folder1, $folder2, $folder3) | & $sut        $result | Where-Object { $_ -eq $true } `            | Measure-Object `            | Select-Object -ExpandProperty Count `            | should be 3
+        $result = ($folder1, $folder2, $folder3) | & $sut
+
+        $result | Where-Object { $_ -eq $true } `
+            | Measure-Object `
+            | Select-Object -ExpandProperty Count `
+            | should be 3
     }
 }

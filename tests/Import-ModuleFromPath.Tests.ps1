@@ -4,20 +4,8 @@ $module = 'roarwrecker.testing'
 $sut = 'Import-ModuleFromPath'
 
 $path = "$(Split-Path -Path $PSScriptRoot -Parent)\$module"
-if (-not (Test-Path $path))
-{
-    throw "Path to module does not exist: '$path'."
-}
-
-# check if module file exists, otherwise the path must be wrong
-if (($path | Get-ChildItem -Filter '*.psm1' | Measure).Count -le 0)
-{
-    throw "Could not find a *.psm1 file on path '$path'"
-}
-
-# If already loaded remove and load module from dev path
 Get-Module $module | Remove-Module -Force
-Import-Module $path
+Import-Module $path -Force -ErrorAction Stop
 
 
 Describe "'$sut' tests with valid module folder" {
@@ -125,6 +113,7 @@ Describe "'$sut' with no path parameter" {
     It "should identify the path when location is set" {
         # invoke the command from the created script
         & $scriptPath  
-        Assert-MockCalled -CommandName Import-Module -Exactly 1 `            -ModuleName $module -Scope It -ParameterFilter { $Name -eq $moduleFolder}
+        Assert-MockCalled -CommandName Import-Module -Exactly 1 `
+            -ModuleName $module -Scope It -ParameterFilter { $Name -eq $moduleFolder}
     }
 }
