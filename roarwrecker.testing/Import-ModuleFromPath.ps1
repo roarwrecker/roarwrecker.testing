@@ -25,57 +25,55 @@
 .EXAMPLE
     Import-ModuleFromPath -Parent -Name Module
 
-    Reloads the module by analyzing the PSCallStack. The module folder must be located 
-    int parent folder where the invocation of Import-ModuleFromPath took place.
+    Reloads the module by analyzing the PSCallStack. The module folder must be 
+    located in the parent folder where the invocation of Import-ModulePath took 
+    place.
 #>
-function Import-ModuleFromPath
-{
+function Import-ModuleFromPath{
     [CmdletBinding()]
-    Param
-    (
+    Param (
         # The path to the module folder.
-        [Parameter(ParameterSetName='ByPath',
-            Mandatory)]
-        [ValidateScript({Test-Path $_ -PathType ‘Container’})]
+        [Parameter(
+            ParameterSetName='ByPath',
+            Mandatory
+        )]
         [string]
         $Path,
 
         # Indicates that the module should be loaded from the parent folder of the current 
         # invocation scope. 
-        [Parameter(ParameterSetName='ByParentSwitch',
-            Mandatory)]
+        [Parameter(
+            ParameterSetName='ByParentSwitch',
+            Mandatory
+        )]
         [switch]
         $Parent,
 
         # The name of the module located in the parent folder.
-        [Parameter(ParameterSetName='ByParentSwitch',
-            Mandatory)]
+        [Parameter(
+            ParameterSetName='ByParentSwitch',
+            Mandatory
+        )]
         [string]
         $Name
     )
     if ($PsCmdlet.ParameterSetName -eq 'ByParentSwitch')
     {
+        # Only the module name has been specified. Resolve path from call stack.
         # todo: error handling
         $Path = "$(GetPathFromCallStack)\$Name"
         Write-Verbose "Identified module path from call stack: $($Path)"
     }
-    $Folder = Get-Item -Path $Path
-
-    Write-Verbose -Message "Path to module: $Folder"
-
-    # check if $Folder points to a module
-    if (!(Test-ModulePath -Path $Folder))
+    else 
     {
-        throw "Could not find the '$($Folder.Name).psm1' file on path '$Folder'"
+        # Only the path has been specified. Resolve module name from path
+        # todo: error handling
+        $Name = (Get-Item $Path -ErrorAction Stop).Name
     }
+    Write-Verbose -Message "Path to module: $Path"
 
-    $loadedModule = Get-Module -Name ($Folder.Name)
-    if (($loadedModule | Measure).Count -gt 0)
-    {
-        Remove-Module -Name $loadedModule
-    }
-
-    Import-Module -Name $Folder
+    Get-Module -Name $Name | Remove-Module -Force
+    Import-Module $path -Force -ErrorAction Stop
 }
 
 # todo: write tests

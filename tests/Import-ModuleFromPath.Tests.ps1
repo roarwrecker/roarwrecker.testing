@@ -61,11 +61,10 @@ Describe "'$sut' tests with no corresponding psm1 file" {
     $moduleFolder = New-Item -Path "$TestDrive\module" -ItemType Directory
 
     Mock Remove-Module { } -ModuleName $module
-    Mock Import-Module { } -ModuleName $module
     Mock Get-Module { } -ModuleName $module
 
     It "should throw error" {
-        { & $sut -Path $moduleFolder } | Should Throw "Could not find the 'module.psm1'"
+        { & $sut -Path $moduleFolder } | Should Throw
     }
 }
 
