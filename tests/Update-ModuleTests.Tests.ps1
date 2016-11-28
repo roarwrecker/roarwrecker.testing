@@ -23,28 +23,28 @@ Describe "'$sut' with invalid path" {
 
 Describe "'$sut' without any existing tests" {
     
-    $firstScriptName = "firstScript"
-    $secondScriptName = "secondScript"
+    # $firstScriptName = "firstScript"
+    # $secondScriptName = "secondScript"
 
-    $modulePath = New-Item -Path "$TestDrive\module" -ItemType Directory
-    New-Item -Path "$modulePath\module.psm1" -ItemType File
-    New-Item -Path "$modulePath\$firstScriptName.ps1" -ItemType File
-    New-Item -Path "$modulePath\$secondScriptName.ps1" -ItemType File
+    # $modulePath = New-Item -Path "$TestDrive\module" -ItemType Directory
+    # New-Item -Path "$modulePath\module.psm1" -ItemType File
+    # New-Item -Path "$modulePath\$firstScriptName.ps1" -ItemType File
+    # New-Item -Path "$modulePath\$secondScriptName.ps1" -ItemType File
 
-    & $sut -Path $modulePath
+    # & $sut -Path $modulePath
 
-    It "should create a tests directory" -Skip {
-        Test-Path -Path "$modulePath\tests" -PathType Container | should be $true
-    }
+    # It "should create a tests directory" -Skip {
+    #     Test-Path -Path "$modulePath\tests" -PathType Container | should be $true
+    # }
 
-    It "should create a test file for the first script" -Skip {
-        Test-Path -Path "$modulePath\tests\$firstScriptName.Tests.ps1" -PathType Leaf `
-            | should be $true
-    }
+    # It "should create a test file for the first script" -Skip {
+    #     Test-Path -Path "$modulePath\tests\$firstScriptName.Tests.ps1" -PathType Leaf `
+    #         | should be $true
+    # }
 
-    It "should create a test file for the second script" -Skip {
-        Test-Path -Path "$modulePath\tests\$secondScriptName.Tests.ps1" -PathType Leaf `
-            | should be $true
-    }
+    # It "should create a test file for the second script" -Skip {
+    #     Test-Path -Path "$modulePath\tests\$secondScriptName.Tests.ps1" -PathType Leaf `
+    #         | should be $true
+    # }
 
 }
