@@ -25,11 +25,10 @@
     Reloads the module from the absolute path
 
 .EXAMPLE
-    Import-ModuleFromPath -Parent -Name Module
+    Import-ModuleFromPath -Parent
 
     Reloads the module by analyzing the PSCallStack. The module folder must be 
-    located in the parent folder where the invocation of Import-ModulePath took 
-    place.
+    located in the parent folder.
 #>
 function Import-ModuleFromPath{
     [CmdletBinding()]
