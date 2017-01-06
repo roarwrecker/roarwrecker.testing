@@ -1,4 +1,4 @@
-﻿#require module pester
+﻿#Requires -Modules Pester
 
 $module = 'roarwrecker.testing'
 $sut = 'Test-ModulePath'
