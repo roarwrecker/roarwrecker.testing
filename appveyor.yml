@@ -2,7 +2,7 @@ install:
   # Install pester via chocolatey
   - cinst pester
 
-version: '0.1.0.{build}'
+version: '{build}'
 build: false
 
 test_script:
