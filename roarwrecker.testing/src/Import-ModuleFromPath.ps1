@@ -49,21 +49,13 @@ function Import-ModuleFromPath{
             Mandatory
         )]
         [switch]
-        $Parent,
-
-        # The name of the module located in the parent folder.
-        [Parameter(
-            ParameterSetName='ByParentSwitch',
-            Mandatory
-        )]
-        [string]
-        $Name
+        $Parent
     )
     if ($PsCmdlet.ParameterSetName -eq 'ByParentSwitch')
     {
-        # Only the module name has been specified. Resolve path from call stack.
         # todo: error handling
-        $Path = "$(GetPathFromCallStack)\$Name"
+        $Path = GetPathFromCallStack
+        $Name = Split-Path -Path $Path -Leaf
         Write-Verbose "Identified module path from call stack: $($Path)"
     }
     else 
