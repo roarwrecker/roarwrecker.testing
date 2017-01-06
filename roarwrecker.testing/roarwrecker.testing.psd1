@@ -12,7 +12,7 @@
 RootModule = 'roarwrecker.testing.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.0'
+ModuleVersion = '0.1.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -30,7 +30,7 @@ CompanyName = 'roarwrecker'
 Copyright = '(c) 2016 Helmut Rohregger. All rights reserved.'
 
 # Description of the functionality provided by this module
-# Description = ''
+Description =  'The roarwrecker.testing module contains functions which can be used inside of Pester tests.'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '3.0'
@@ -100,14 +100,14 @@ PrivateData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
         Tags = @(
-            'testing', 'unit test', 'module', 'test', 'tdd', 'roarwrecker',
+            'testing', 'unit', 'module', 'test', 'tdd', 'roarwrecker', 'pester',
             'Import-ModuleFromPath', 'Test-ModulePath', 'Update-ModuleTests')
 
         # A URL to the license for this module.
-        LicenseUri = 'https://github.com/roarwrecker/PowerShell/blob/master/LICENSE'
+        LicenseUri = 'https://github.com/roarwrecker/roarwrecker.testing/blob/master/LICENSE'
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://github.com/roarwrecker/PowerShell'
+        ProjectUri = 'https://github.com/roarwrecker/roarwrecker.testing'
 
         # A URL to an icon representing this module.
         # IconUri = ''
