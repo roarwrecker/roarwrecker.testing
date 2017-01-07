@@ -63,7 +63,6 @@ function Import-ModuleFromPath{
     )
     if ($PsCmdlet.ParameterSetName -eq 'ByParentSwitch')
     {
-        # todo: error handling
         $Path = GetPathFromCallStack
         $Name = Split-Path -Path $Path -Leaf
         Write-Verbose "Identified module path from call stack: $($Path)"
@@ -71,16 +70,16 @@ function Import-ModuleFromPath{
     else 
     {
         # Only the path has been specified. Resolve module name from path
-        # todo: error handling
         $Name = (Get-Item $Path -ErrorAction Stop).Name
     }
+    
+    $absolutePath = (Get-Item $Path).FullName
     Write-Verbose -Message "Path to module: $Path"
 
     Get-Module -Name $Name -All | Remove-Module -Force
-    Import-Module $path -Force -ErrorAction Stop
+    Import-Module $absolutePath -Force -ErrorAction Stop
 }
 
-# todo: write tests
 function GetPathFromCallStack
 {
     $scriptRoot = (Get-PSCallStack)[2].GetFrameVariables().PSScriptRoot.Value

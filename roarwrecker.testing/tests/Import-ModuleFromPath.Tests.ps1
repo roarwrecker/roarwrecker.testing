@@ -1,4 +1,5 @@
 ﻿#Requires -Modules Pester
+. $PSScriptRoot\TestHelper.ps1
 
 $module = 'roarwrecker.testing'
 $sut = 'Import-ModuleFromPath'
@@ -10,16 +11,13 @@ Import-Module $path -Force -ErrorAction Stop
 
 Describe "'$sut' tests with valid module folder" {
 
-    # Create the module folder
-    $moduleFolder = New-Item -Path "$TestDrive\module" -ItemType Directory
-    # Create the corresponding module.psm1 file
-    New-Item -Path "$moduleFolder\module.psm1" -ItemType File
+    $modulePath = New-TestModule 'mymodule'
 
     Mock -CommandName Remove-Module -ModuleName $module -MockWith { }
     Mock -CommandName Import-Module -ModuleName $module -MockWith { }
 
     It "should not throw error" {
-        { & $sut -Path $moduleFolder } | Should Not Throw
+        { & $sut -Path $modulePath } | Should Not Throw
     }
     
     Context "With loaded module" {
@@ -29,7 +27,7 @@ Describe "'$sut' tests with valid module folder" {
             New-Object -TypeName PSModuleInfo -ArgumentList $false 
         }
 
-        & $sut -Path $moduleFolder
+        & $sut -Path $modulePath
         
         It "Remove-Module should be called" {
             Assert-MockCalled -CommandName Remove-Module -Exactly 1 -ModuleName $module -Scope Context
@@ -45,7 +43,7 @@ Describe "'$sut' tests with valid module folder" {
         # Simulate no module has been loaded
         Mock -CommandName Get-Module -ModuleName $module -MockWith { }
         
-        & $sut -Path $moduleFolder
+        & $sut -Path $modulePath
         
         It "Remove-Module should not be called" {
             Assert-MockCalled -CommandName Remove-Module -Exactly 0 -ModuleName $module -Scope Context
@@ -57,65 +55,114 @@ Describe "'$sut' tests with valid module folder" {
     }
 }
 
-
 Describe "'$sut' tests with no corresponding psm1 file" {
     
-    # Create the module folder
-    $moduleFolder = New-Item -Path "$TestDrive\module" -ItemType Directory
+    # Only create folder without module file
+    $modulePath = New-Item -Path "$TestDrive\module" -ItemType Directory
 
     Mock -CommandName Remove-Module -ModuleName $module -MockWith { }
     Mock -CommandName Get-Module -ModuleName $module -MockWith { }
 
     It "should throw error" {
-        { & $sut -Path $moduleFolder } | Should Throw
+        { & $sut -Path $modulePath } | Should Throw
     }
 }
 
 Describe "'$sut' tests with invalid path" {
     
-    # Do not create the module folder
-    $moduleFolder = "$TestDrive\module"
+    $modulePath = "C:\path\does\not\exist"
 
-    Mock -CommandName Remove-Module -ModuleName $module -MockWith { }
-    Mock -CommandName Import-Module -ModuleName $module -MockWith { }
-    Mock -CommandName Get-Module -ModuleName $module -MockWith { }
+    It "Should not exist the module" {
+        $modulePath | Should not exist
+    }
 
     It "should throw error" {
-        { & $sut -Path $moduleFolder } | Should Throw
+        { & $sut -Path $modulePath } | Should Throw
     }
 }
 
 <# 
-    Idea of the current tests:
-    When the SUT gets invoked without a Path parameter the Path gets determinded by
-    analyzing the PSCallStack. To get a valid CallStack the invocation of the SUT gets
-    written into a *.ps1 file on the $TestDrive. The created *.ps1 file will be used 
-    to call the SUT.
+    Idea of the following tests:
+    When the SUT gets invoked without a Path parameter using the Parent switch,
+    the Path gets determinded by analyzing the PSCallStack. To get a valid CallStack 
+    the invocation of the SUT gets written into a *.ps1 file on the $TestDrive. 
+    The created *.ps1 file will be used to call the SUT.
 #>
-Describe "'$sut' with no path parameter" {
+Describe "'$sut' with Parent switch" {
 
-    $moduleName = 'module'
-    # Create the module folder
-    $moduleFolder = New-Item -Path "$TestDrive\$moduleName" -ItemType Directory
-    # Create tests folder where the test script will be written to.
-    $testsFolder = New-Item -Path "$moduleFolder\tests" -ItemType Directory
-    # Create the corresponding module.psm1 file
-    New-Item -Path "$moduleFolder\$moduleName.psm1" -ItemType File
-
+    $modulePath = New-TestModule 'mymodule'
     # Create the file as it would be a pester tests file and write the file content into it
-    $scriptPath = "$($testsFolder)\Invoke-SutWithoutPath.Tests.ps1"
-    New-Item -Path $scriptPath -ItemType File
-    # Content of test script: Contains the actual invocation of the SUT.
-    Set-Content -Path $scriptPath -Value "$($sut) -Parent"
+    $scriptPath = New-TestScript `
+        -Path "$modulePath\tests\Invoke-SutWithoutPath.Tests.ps1" `
+        -Content "$sut -Parent"
     
     Mock -CommandName Remove-Module -ModuleName $module -MockWith { }
     Mock -CommandName Import-Module -ModuleName $module -MockWith { }
     Mock -CommandName Get-Module -ModuleName $module -MockWith { }
 
+    It "Should exist the test script" {
+        $scriptPath | Should exist
+    }
+
     It "should identify the path when location is set" {
         # invoke the command from the created script
         & $scriptPath  
         Assert-MockCalled -CommandName Import-Module -Exactly 1 `
-            -ModuleName $module -Scope It -ParameterFilter { $Name -eq $moduleFolder}
+            -ModuleName $module -Scope It -ParameterFilter { $Name -eq $modulePath}
+    }
+}
+
+Describe "'$sut' with real module structure" {
+
+    $modulePath = New-TestModule 'mymodule'
+
+    AfterEach {
+        Get-Module 'mymodule' -All | Remove-Module
+    }
+
+    Context "Calling $sut using absolute path" {
+
+        $scriptPath = New-TestScript -Path "$modulePath\Some.Tests.ps1" `
+            -Content "$sut $modulePath"
+
+        It "should load module" {
+            & $scriptPath
+            Get-Module 'mymodule' -All | Should not BeNullOrEmpty
+        }
+    }
+    
+    Context "Calling $sut using relative path" {
+        
+        $currentLocation = Get-Location
+        $scriptPath = New-TestScript -Path "$modulePath\Some.Tests.ps1" `
+            -Content "$sut ..\mymodule"
+
+        It "should load module when at correct location" {
+            Set-Location -Path $modulePath
+            & $scriptPath
+            Get-Module 'mymodule' -All | Should not BeNullOrEmpty
+        }
+
+        It "should throw when at wrong location" {
+            Set-Location -Path (Split-Path $modulePath -Parent)
+            { & $scriptPath } | Should throw
+        }
+
+        Set-Location $currentLocation
+    }
+
+    Context "Calling $sut using '.' for Path parameter" {
+
+        $currentLocation = Get-Location
+        $scriptPath = New-TestScript -Path "$modulePath\Some.Tests.ps1" `
+            -Content "$sut ."
+
+        It "should load module" {
+            Set-Location -Path $modulePath
+            & $scriptPath
+            Get-Module 'mymodule' -All | Should not BeNullOrEmpty
+        }
+
+        Set-Location $currentLocation
     }
 }
