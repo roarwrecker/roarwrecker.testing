@@ -36,7 +36,7 @@
         |-- tests
             |-- some.tests.ps1
     
-    If the function "Import-ModuleFromPath -Parent" is beein used inside the 
+    If the function "Import-ModuleFromPath -Parent" is being used inside the 
     "some.tests.ps1"" Pester test, the import function resolves the module path
     "c:\path\to\module"
 #>
