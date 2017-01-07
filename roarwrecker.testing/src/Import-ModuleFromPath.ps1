@@ -41,12 +41,13 @@
     "c:\path\to\module"
 #>
 function Import-ModuleFromPath{
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='ByPath')]
     Param (
         # The path to the module folder.
         [Parameter(
             ParameterSetName='ByPath',
-            Mandatory
+            Mandatory,
+            Position=0
         )]
         [string]
         $Path,
