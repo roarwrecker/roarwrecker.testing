@@ -25,6 +25,10 @@ You can clone the repository and add the [modules folder](https://github.com/roa
 Install-Module -Name roarwrecker.testing -Repository PSGallery
 ```
 
+### Usage
+
+Please check the PowerShell help written for the roarwrecker.testing functions.
+
 ### License
 
 The roarwrecker.testing PowerShell module is distributed under the [MIT license](https://github.com/roarwrecker/roarwrecker.testing/blob/master/LICENSE).
