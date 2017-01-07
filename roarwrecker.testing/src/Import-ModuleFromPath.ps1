@@ -6,7 +6,7 @@
 
 .DESCRIPTION
     The function can be used in a Pester test script to load a module
-    from the developer path by removing an already loaded module 
+    from the developer path by removing all already loaded modules 
     with the same name.
 
 .EXAMPLE
@@ -28,7 +28,17 @@
     Import-ModuleFromPath -Parent
 
     Reloads the module by analyzing the PSCallStack. The module folder must be 
-    located in the parent folder.
+    located in the parent folder. The Parent switch can be used when the tests 
+    folder is located inside the module folder.
+    
+    c:\path\to\module
+        |-- module.psm1 (or module.psd1)
+        |-- tests
+            |-- some.tests.ps1
+    
+    If the function "Import-ModuleFromPath -Parent" is beein used inside the 
+    "some.tests.ps1"" Pester test, the import function resolves the module path
+    "c:\path\to\module"
 #>
 function Import-ModuleFromPath{
     [CmdletBinding()]
@@ -65,7 +75,7 @@ function Import-ModuleFromPath{
     }
     Write-Verbose -Message "Path to module: $Path"
 
-    Get-Module -Name $Name | Remove-Module -Force
+    Get-Module -Name $Name -All | Remove-Module -Force
     Import-Module $path -Force -ErrorAction Stop
 }
 
