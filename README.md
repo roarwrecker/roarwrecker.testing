@@ -15,7 +15,7 @@ I have started the roarwrecker.testing project to create a collection of PowerSh
 
 ### Dependencies
 
-The roarwrecker.testing modules has the following dependencies:
+The roarwrecker.testing module has the following dependencies:
 - [Pester](https://github.com/pester/Pester) for executing the tests written for roarwrecker.testing
 
 ### Installation
