@@ -15,12 +15,12 @@
     Reloads the module from the current location
 
 .EXAMPLE
-    Import-ModuleFromPath ..\roarwrecker.network
+    Import-ModuleFromPath ..\anymodule
 
     Reloads the module from the relative path
 
 .EXAMPLE
-    Import-ModuleFromPath C:\dev\powershell\modules\roarwrecker.network
+    Import-ModuleFromPath C:\path\to\module
 
     Reloads the module from the absolute path
 

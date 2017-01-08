@@ -1,7 +1,7 @@
 ﻿#Requires -Modules Pester
 . $PSScriptRoot\TestHelper.ps1
 
-$module = 'roarwrecker.testing'
+$module = 'testing'
 $sut = 'Import-ModuleFromPath'
 
 $path = Split-Path -Path $PSScriptRoot -Parent
