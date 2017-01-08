@@ -120,7 +120,7 @@ Describe "'$sut' with real module structure" {
         Get-Module 'mymodule' -All | Remove-Module
     }
 
-    Context "Calling $sut using absolute path" {
+    Context "Calling $sut from tests script using absolute path" {
 
         $scriptPath = New-TestScript -Path "${modulePath}\Some.Tests.ps1" `
             -Content "$sut $modulePath"
@@ -134,18 +134,16 @@ Describe "'$sut' with real module structure" {
     Context "Calling $sut using relative path" {
         
         $currentLocation = Get-Location
-        $scriptPath = New-TestScript -Path "${modulePath}\Some.Tests.ps1" `
-            -Content "$sut ..\mymodule"
-
+        
         It "should load module when at correct location" {
             Set-Location -Path $modulePath
-            & $scriptPath
+            & $sut ..\mymodule
             Get-Module 'mymodule' -All | Should not BeNullOrEmpty
         }
 
         It "should throw when at wrong location" {
             Set-Location -Path (Split-Path $modulePath -Parent)
-            { & $scriptPath } | Should throw
+            { & $sut ..\mymodule } | Should throw
         }
 
         Set-Location $currentLocation
@@ -154,12 +152,10 @@ Describe "'$sut' with real module structure" {
     Context "Calling $sut using '.' for Path parameter" {
 
         $currentLocation = Get-Location
-        $scriptPath = New-TestScript -Path "${modulePath}\Some.Tests.ps1" `
-            -Content "$sut ."
 
         It "should load module" {
             Set-Location -Path $modulePath
-            & $scriptPath
+            & $sut .
             Get-Module 'mymodule' -All | Should not BeNullOrEmpty
         }
 
