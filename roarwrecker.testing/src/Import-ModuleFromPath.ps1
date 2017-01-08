@@ -65,7 +65,7 @@ function Import-ModuleFromPath{
     {
         $Path = GetPathFromCallStack
         $Name = Split-Path -Path $Path -Leaf
-        Write-Verbose "Identified module path from call stack: $($Path)"
+        Write-Verbose "Identified module path from call stack: $Path"
     }
     else 
     {

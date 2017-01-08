@@ -1,7 +1,7 @@
 #Requires -Modules Pester
 $sut = 'TestHelper'
 
-. "$($PSScriptRoot)\$($sut).ps1"
+. "${PSScriptRoot}\${sut}.ps1"
 
 Describe "'New-TestModule' tests" {
   
@@ -27,8 +27,8 @@ Describe "'New-TestModule' tests" {
 Describe "'New-TestScript' tests" {
   
     $sampleText = 'Hello World'
-    $path = New-TestScript -Path "$TestDrive\mytest.ps1" -Content @"
-Write-Output "$($sampleText)!"
+    $path = New-TestScript -Path "${TestDrive}\mytest.ps1" -Content @"
+Write-Output "${sampleText}!"
 "@
 
     It "should exist the module folder" {

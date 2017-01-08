@@ -58,7 +58,7 @@ Describe "'$sut' tests with valid module folder" {
 Describe "'$sut' tests with no corresponding psm1 file" {
     
     # Only create folder without module file
-    $modulePath = New-Item -Path "$TestDrive\module" -ItemType Directory
+    $modulePath = New-Item -Path "${TestDrive}\module" -ItemType Directory
 
     Mock -CommandName Remove-Module -ModuleName $module -MockWith { }
     Mock -CommandName Get-Module -ModuleName $module -MockWith { }
@@ -93,7 +93,7 @@ Describe "'$sut' with Parent switch" {
     $modulePath = New-TestModule 'mymodule'
     # Create the file as it would be a pester tests file and write the file content into it
     $scriptPath = New-TestScript `
-        -Path "$modulePath\tests\Invoke-SutWithoutPath.Tests.ps1" `
+        -Path "${modulePath}\tests\Invoke-SutWithoutPath.Tests.ps1" `
         -Content "$sut -Parent"
     
     Mock -CommandName Remove-Module -ModuleName $module -MockWith { }
@@ -122,7 +122,7 @@ Describe "'$sut' with real module structure" {
 
     Context "Calling $sut using absolute path" {
 
-        $scriptPath = New-TestScript -Path "$modulePath\Some.Tests.ps1" `
+        $scriptPath = New-TestScript -Path "${modulePath}\Some.Tests.ps1" `
             -Content "$sut $modulePath"
 
         It "should load module" {
@@ -134,7 +134,7 @@ Describe "'$sut' with real module structure" {
     Context "Calling $sut using relative path" {
         
         $currentLocation = Get-Location
-        $scriptPath = New-TestScript -Path "$modulePath\Some.Tests.ps1" `
+        $scriptPath = New-TestScript -Path "${modulePath}\Some.Tests.ps1" `
             -Content "$sut ..\mymodule"
 
         It "should load module when at correct location" {
@@ -154,7 +154,7 @@ Describe "'$sut' with real module structure" {
     Context "Calling $sut using '.' for Path parameter" {
 
         $currentLocation = Get-Location
-        $scriptPath = New-TestScript -Path "$modulePath\Some.Tests.ps1" `
+        $scriptPath = New-TestScript -Path "${modulePath}\Some.Tests.ps1" `
             -Content "$sut ."
 
         It "should load module" {
