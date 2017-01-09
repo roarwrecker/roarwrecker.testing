@@ -1,9 +1,11 @@
 # PowerShell testing module
+[![Build status](https://ci.appveyor.com/api/projects/status/x5sl8x1esgb9r3mi/branch/master?svg=true)](https://ci.appveyor.com/project/roarwrecker/roarwrecker-testing/branch/master)
+
 I have started the PowerShell testing project to create a collection of PowerShell test functions. This functions can be used to write Pester tests for your own PowerShell scripts. I have just started using Pester and, therfore, I hope the number of useful functions will increase in the future.
 
-### Current build status
+### Build Status
 
-- [AppVeyor ![](https://ci.appveyor.com/api/projects/status/x5sl8x1esgb9r3mi/branch/master?svg=true)](https://ci.appveyor.com/project/roarwrecker/roarwrecker-testing/branch/master)
+The following list shows the build status for the testing module on different PowerShell build agents. The different agents execute the implemented Pester tests on a PowerShell with the specified version. This is a free service offered by [PowerShell.org](https://powershell.org/build-server/).
 
 - [PowerShell V3 ![](https://build.powershell.org/app/rest/builds/buildType:RoarwreckerTesting_TestOnPowerShellV3/statusIcon)]
 (https://build.powershell.org/viewType.html?buildTypeId=RoarwreckerTesting_TestOnPowerShellV3)
