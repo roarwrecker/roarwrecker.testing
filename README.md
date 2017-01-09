@@ -33,4 +33,4 @@ Please check the PowerShell help written for all testing module functions.
 
 ### License
 
-The PowerShell testing module is distributed under the [MIT license](https://github.com/roarwrecker/testing/blob/master/LICENSE).
+This project is licensed under the [MIT License](https://github.com/roarwrecker/testing/blob/master/LICENSE).
