@@ -77,7 +77,7 @@ function Import-ModuleFromPath{
     Write-Verbose -Message "Path to module: $Path"
 
     Get-Module -Name $Name -All | Remove-Module -Force
-    Import-Module $absolutePath -Force -ErrorAction Stop
+    Import-Module $absolutePath -Global -Force -ErrorAction Stop
 }
 
 function GetPathFromCallStack
