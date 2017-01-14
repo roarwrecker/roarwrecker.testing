@@ -10,7 +10,7 @@ Import-ModuleFromPath -Path "${PSScriptRoot}\DummyModule"
 Describe "Calling method from DummyModule when imported via Path parameter" {
 
     It "Should return Hello World" {
-        Invoke-MyDummyFunctionForTheTest | Should be 'Hello World'
+        Invoke-MyDummyFunctionForTheTest | Should be 'Hello World!'
     }
     
 }
