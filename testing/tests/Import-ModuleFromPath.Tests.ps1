@@ -17,7 +17,7 @@ Describe "'$sut' tests with valid module folder" {
     Mock -CommandName Import-Module -ModuleName $module -MockWith { }
 
     It "should not throw error" {
-        { & $sut -Path $modulePath } | Should Not Throw
+        { & $sut -Path $modulePath } | Should Throw
     }
     
     Context "With loaded module" {
