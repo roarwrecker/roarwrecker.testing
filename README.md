@@ -7,11 +7,9 @@ I have started the PowerShell testing project to create a collection of PowerShe
 
 The following list shows the build status for the testing module on different PowerShell build agents. The different agents execute the implemented Pester tests on a PowerShell with the specified version. This is a free service offered by [PowerShell.org](https://powershell.org/build-server/).
 
-- [PowerShell V3 ![](https://build.powershell.org/app/rest/builds/buildType:RoarwreckerTesting_TestOnPowerShellV3/statusIcon)]
-(https://build.powershell.org/viewType.html?buildTypeId=RoarwreckerTesting_TestOnPowerShellV3)
+- [PowerShell V3 ![](https://build.powershell.org/app/rest/builds/buildType:RoarwreckerTesting_TestOnPowerShellV3/statusIcon)](https://build.powershell.org/viewType.html?buildTypeId=RoarwreckerTesting_TestOnPowerShellV3)
 
-- [PowerShell V4 ![](https://build.powershell.org/app/rest/builds/buildType:RoarwreckerTesting_TestOnPowerShellV4/statusIcon)]
-(https://build.powershell.org/viewType.html?buildTypeId=RoarwreckerTesting_TestOnPowerShellV4)
+- [PowerShell V4 ![](https://build.powershell.org/app/rest/builds/buildType:RoarwreckerTesting_TestOnPowerShellV4/statusIcon)](https://build.powershell.org/viewType.html?buildTypeId=RoarwreckerTesting_TestOnPowerShellV4)
 
 - [PowerShell V5 ![](https://build.powershell.org/app/rest/builds/buildType:RoarwreckerTesting_TestOnPowerShellV5/statusIcon)](https://build.powershell.org/viewType.html?buildTypeId=RoarwreckerTesting_TestOnPowerShellV5)
 
